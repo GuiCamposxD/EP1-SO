@@ -5,9 +5,45 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.Scanner;
+import java.util.*;
 
 public class Escalonador{
+    
+    public static void lerProgramas(){
+        List<List<String>> registros = new ArrayList<>();
+        registros.add(new ArrayList<>());
+
+         for (int i = 1; i<=10; i++){
+            registros.add(new ArrayList<>());
+            String nPrograma = String.valueOf(i);
+            String path = "programas/";
+
+            if (i<10)
+                path += "0" + nPrograma + ".txt";
+            else
+                path += nPrograma + ".txt";
+
+            File aux = new File (path);
+            try{
+                Scanner scanner = new Scanner(aux);
+                String linha = new String();
+
+                while (!linha.equals("SAIDA")){
+                    linha = scanner.nextLine();
+                    registros.get(i).add(linha);
+                }
+
+                scanner.close();
+            }catch(FileNotFoundException e){
+                System.out.println("Não foi possível encontrar o arquivo");
+                e.printStackTrace();
+            }
+         }
+    }
     public static void main(String[] args) {
+
+        lerProgramas();
+
         int quantum = 0;
 
         // Lê o arquivo do quantum e atribui a variavel
