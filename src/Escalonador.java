@@ -8,9 +8,11 @@ import java.util.Scanner;
 import java.util.*;
 
 public class Escalonador{
+
+    public static List<List<String>> registros = new ArrayList<>();
     
     public static void lerProgramas(){
-        List<List<String>> registros = new ArrayList<>();
+        
         registros.add(new ArrayList<>());
 
          for (int i = 1; i<=10; i++){
