@@ -7,6 +7,10 @@ public class BCP {
     private int regX;
     private int regY;
 
+    public String getNomeProcesso() {
+        return this.nomeProcesso;
+    }
+
     public BCP(String nome, int id) {
         this.nomeProcesso = nome;
         this.id = id;

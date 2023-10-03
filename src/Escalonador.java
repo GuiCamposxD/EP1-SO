@@ -1,3 +1,4 @@
+import estruturas.BCP;
 import estruturas.TabelaProcessos;
 
 import java.io.*;
@@ -6,7 +7,7 @@ import java.util.*;
 public class Escalonador{
     private static List<List<String>> programas = new ArrayList<>();
     private static TabelaProcessos processos = new TabelaProcessos();
-    
+
     public static void lerProgramas() {
         String path = "./programas";
         File pasta = new File(path);
@@ -27,6 +28,7 @@ public class Escalonador{
                             while ((linha = leitor.readLine()) != null) {
                                 programas.get(i).add(linha);
                             }
+                            processos.insereTabelaProcessoProntos(new BCP(programas.get(i).get(0), i));
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -40,10 +42,6 @@ public class Escalonador{
 
     public static void main(String[] args) {
         lerProgramas();
-
-        for (List<String> programa : programas) {
-            System.out.println(programa);
-        }
 
         int quantum = 0;
 
@@ -59,8 +57,6 @@ public class Escalonador{
             System.out.println("Não foi possível ler o arquivo quantum.");
             e.printStackTrace();
         }
-
-        Escalonador.processos = new TabelaProcessos();
 
         // Cria o arquivo LogXX.txt
         String pathLog = "./logs/";
