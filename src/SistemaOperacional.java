@@ -14,6 +14,7 @@ public class SistemaOperacional {
     private final TabelaProcessos tabelaProcessos;
     private final ListaProcessos listaProcessosProntos;
     private final ListaProcessos listaProcessosBloqueados;
+    private int quantidadeProcessos;
     private int processosFinalizados;
     private int quantum;
 
@@ -66,6 +67,7 @@ public class SistemaOperacional {
 
         if (pasta.isDirectory()) {
             File[] arquivos = pasta.listFiles();
+            this.quantidadeProcessos = arquivos.length - 1;
 
             if (arquivos != null) {
                 Arrays.sort(arquivos, Comparator.comparing(File::getName));
@@ -103,7 +105,7 @@ public class SistemaOperacional {
     }
 
     public void executaProcessos(SistemaOperacional sistemaOperacional) {
-        while (processosFinalizados < this.tabelaProcessos.getTabela().size()) {
+        while (processosFinalizados != this.quantidadeProcessos) {
             this.escalonador.escalonaProcessos(sistemaOperacional);
         }
     }
