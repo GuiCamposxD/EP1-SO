@@ -34,6 +34,7 @@ public class Escalonador{
 
             if (primeiraLetraComando == 'E') {
                 lidaEntradaSaida(processoExecutando, processosBloqueados);
+                processosBloqueados.getFila().add(processoExecutando);
             }
 
             if (primeiraLetraComando == 'C' && !processoExecutando.getFezES()) {
@@ -53,7 +54,6 @@ public class Escalonador{
         processoExecutando.setEstado("Bloqueado");
         processoExecutando.setTempoEspera(21);
         processoExecutando.incrementaPc();
-        processosBloqueados.getFila().add(processoExecutando);
     }
 
     private void lidaComando(BCP processoExecutando) {
