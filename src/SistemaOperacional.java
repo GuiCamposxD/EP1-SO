@@ -12,10 +12,21 @@ import java.util.Comparator;
 public class SistemaOperacional {
     private Escalonador escalonador;
     private final TabelaProcessos tabelaProcessos;
-    private final ListaProcessos processosProntos;
-    private final ListaProcessos processosBloqueados;
+    private final ListaProcessos listaProcessosProntos;
+    private final ListaProcessos listaProcessosBloqueados;
+    private int processosFinalizados;
 
-    //Getters
+    public SistemaOperacional() {
+        this.escalonador = new Escalonador();
+        this.tabelaProcessos = new TabelaProcessos();
+        this.listaProcessosProntos = new ListaProcessos();
+        this.listaProcessosBloqueados = new ListaProcessos();
+        this.processosFinalizados = 0;
+
+        this.lerProgramas();
+    }
+
+    // Getters
     public Escalonador getEscalonador() {
         return this.escalonador;
     }
@@ -25,23 +36,17 @@ public class SistemaOperacional {
     }
 
     public ListaProcessos getProcessosProntos() {
-        return this.processosProntos;
+        return this.listaProcessosProntos;
     }
 
     public ListaProcessos getProcessosBloqueados() {
-        return this.processosBloqueados;
-    }
-    public SistemaOperacional() {
-        this.escalonador = new Escalonador();
-        this.tabelaProcessos = new TabelaProcessos();
-        this.processosProntos = new ListaProcessos();
-        this.processosBloqueados = new ListaProcessos();
-
-        this.lerProgramas();
+        return this.listaProcessosBloqueados;
     }
 
-    private void insereTabelaPronto(BCP processo) {
-        this.getProcessosProntos().adicionaProcesso(processo);
+    // Setters
+
+    public void setProcessosTerminados(int processosFinalizados) {
+        this.processosFinalizados = processosFinalizados;
     }
 
     private void lerProgramas() {
@@ -64,12 +69,17 @@ public class SistemaOperacional {
                             );
 
                             String linha;
+                            boolean primeiraLinha = true;
 
                             while ((linha = leitor.readLine()) != null) {
+                                if (primeiraLinha) {
+                                    primeiraLinha = false;
+                                    continue;
+                                }
                                 this.tabelaProcessos.getTabela().get(i).setSegmentoTexto(linha);
                             }
 
-                            this.insereTabelaPronto(this.tabelaProcessos.getTabela().get(i));
+                            this.getProcessosProntos().adicionaProcesso(this.tabelaProcessos.getTabela().get(i));
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -81,7 +91,13 @@ public class SistemaOperacional {
         }
     }
 
-    public void executaProcessos() {
+    public void executaProcessos(SistemaOperacional sistemaOperacional) {
+        while (processosFinalizados < this.tabelaProcessos.getTabela().size()) {
+            this.escalonador.escalonaProcessos(sistemaOperacional);
+        }
+    }
 
+    public void incrementaProcessosFinalizados() {
+        this.processosFinalizados++;
     }
 }
