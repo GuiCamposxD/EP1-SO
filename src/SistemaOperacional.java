@@ -15,6 +15,7 @@ public class SistemaOperacional {
     private final ListaProcessos listaProcessosProntos;
     private final ListaProcessos listaProcessosBloqueados;
     private int processosFinalizados;
+    private int quantum;
 
     public SistemaOperacional() {
         this.escalonador = new Escalonador();
@@ -22,6 +23,7 @@ public class SistemaOperacional {
         this.listaProcessosProntos = new ListaProcessos();
         this.listaProcessosBloqueados = new ListaProcessos();
         this.processosFinalizados = 0;
+        this.setQuantum();
 
         this.lerProgramas();
     }
@@ -44,7 +46,16 @@ public class SistemaOperacional {
     }
 
     // Setters
-
+    private void setQuantum() {
+        try (BufferedReader leitor = new BufferedReader(new FileReader("./programas/quantum.txt"))) {
+            String linha;
+            while ((linha = leitor.readLine()) != null) {
+                this.quantum = Integer.parseInt(linha);
+            }
+        } catch (IOException | NumberFormatException e) {
+            throw new RuntimeException("Não foi possível ler o quantum");
+        }
+    }
     public void setProcessosTerminados(int processosFinalizados) {
         this.processosFinalizados = processosFinalizados;
     }
@@ -65,7 +76,7 @@ public class SistemaOperacional {
 
                         try (BufferedReader leitor = new BufferedReader(new FileReader(arquivo))) {
                             this.tabelaProcessos.insereProcesso(
-                                    new BCP(arquivos[i].getName(), i)
+                                    new BCP(arquivos[i].getName(), i, this.quantum)
                             );
 
                             String linha;

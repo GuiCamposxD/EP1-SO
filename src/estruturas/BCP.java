@@ -14,6 +14,7 @@ public class BCP {
     private int instrucoesExecutadas;
     private int tempoEspera;
     private int nProcessosExecutadosEnquantoBloqueado;
+    private int quantumRestante;
 
     //Getters
     public ArrayList<String> getSegmentoTexto() {
@@ -59,6 +60,10 @@ public class BCP {
         return nProcessosExecutadosEnquantoBloqueado;
     }
 
+    public int getQuantumRestante() {
+        return quantumRestante;
+    }
+
     //Setters
     public void setSegmentoTexto(String segmentoTexto) {
         this.segmentoTexto.add(segmentoTexto);
@@ -83,6 +88,7 @@ public class BCP {
     public void incrementaInstrucoesExecutadas() {
         this.instrucoesExecutadas++;
     }
+
     public void incrementaNProcessosExecutadosEnquantoBloqueado() {
         this.nProcessosExecutadosEnquantoBloqueado++;
     }
@@ -95,7 +101,11 @@ public class BCP {
         this.tempoEspera = tempoEspera;
     }
 
-    public BCP(String nome, int id) {
+    public void setQuantumRestante(int quantumRestante) {
+        this.quantumRestante = quantumRestante;
+    }
+
+    public BCP(String nome, int id, int quantum) {
         this.nomeProcesso = nome;
         this.id = id;
         this.pc = 0;
@@ -105,6 +115,7 @@ public class BCP {
         this.segmentoTexto = new ArrayList<>();
         this.fezES = false;
         this.instrucoesExecutadas = 0;
+        this.quantumRestante = quantum;
     }
 
     public void decrementaTempoEspera() {

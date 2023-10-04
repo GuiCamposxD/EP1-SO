@@ -5,24 +5,6 @@ import java.io.*;
 import java.util.Iterator;
 
 public class Escalonador{
-    private int quantum;
-
-    public Escalonador() {
-        this.setQuantum();
-    }
-
-    // Setters
-    private void setQuantum() {
-        try (BufferedReader leitor = new BufferedReader(new FileReader("./programas/quantum.txt"))) {
-            String linha;
-            while ((linha = leitor.readLine()) != null) {
-                this.quantum = Integer.parseInt(linha);
-            }
-        } catch (IOException | NumberFormatException e) {
-            throw new RuntimeException("Não foi possível ler o quantum");
-        }
-    }
-
     public void incrementaProcessosExecutadosDosProcessosBloqueados(SistemaOperacional sistemaOperacional) {
         ListaProcessos processosBloqueados = sistemaOperacional.getProcessosBloqueados();
 
@@ -39,7 +21,9 @@ public class Escalonador{
         processoExecutando.setEstado("Executando");
         processosProntos.getFila().remove(0);
 
-        for (int i = 0; i < this.quantum; i++) {
+        lidaProcessosBloqueados(processosBloqueados, processosProntos);
+
+        for (int i = processoExecutando.getQuantumRestante(); i > 0; i--) {
             String comando = processoExecutando.getSegmentoTexto().get(processoExecutando.getPc());
             char primeiraLetraComando = comando.charAt(0);
 
@@ -58,10 +42,6 @@ public class Escalonador{
                 lidaRegistradores(processoExecutando, comando);
             }
         }
-
-        lidaProcessosBloqueados(processosBloqueados, processosProntos);
-
-        lidaProcessosNaoProntos(processosProntos, processosBloqueados);
     }
 
     private void lidaEntradaSaida(BCP processoExecutando, ListaProcessos processosBloqueados) {
@@ -71,7 +51,7 @@ public class Escalonador{
 
         processoExecutando.setFezES(true);
         processoExecutando.setEstado("Bloqueado");
-        processoExecutando.setTempoEspera(this.quantum);
+        processoExecutando.setTempoEspera(21);
         processoExecutando.incrementaPc();
         processosBloqueados.getFila().add(processoExecutando);
     }
@@ -98,6 +78,16 @@ public class Escalonador{
     }
 
     private void lidaProcessosBloqueados(ListaProcessos processosBloqueados, ListaProcessos processosProntos) {
+        if (processosProntos.getFila().isEmpty() && !processosBloqueados.getFila().isEmpty()) {
+            processosProntos.getFila().addAll(processosBloqueados.getFila());
+            return;
+        }
+
+        for (BCP processo : processosBloqueados.getFila()) {
+            processo.incrementaNProcessosExecutadosEnquantoBloqueado();
+            processo.decrementaTempoEspera();
+        }
+
         Iterator<BCP> iterator = processosBloqueados.getFila().iterator();
         while (iterator.hasNext()) {
             BCP processo = iterator.next();
@@ -107,18 +97,6 @@ public class Escalonador{
             }
         }
     }
-
-    private void lidaProcessosNaoProntos(ListaProcessos processosProntos, ListaProcessos processosBloqueados) {
-        if (processosProntos.getFila().isEmpty() && !processosBloqueados.getFila().isEmpty()) {
-            processosProntos.getFila().addAll(processosBloqueados.getFila());
-        }
-
-        for (BCP processo : processosBloqueados.getFila()) {
-            processo.incrementaNProcessosExecutadosEnquantoBloqueado();
-            processo.decrementaTempoEspera();
-        }
-    }
-
 //    public void teste() {
 //        int quantum = 0;
 //
