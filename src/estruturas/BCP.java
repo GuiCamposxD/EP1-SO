@@ -1,14 +1,43 @@
 package estruturas;
+
+import java.util.ArrayList;
+
 public class BCP {
     private final String nomeProcesso;
     private final int id;
     private int pc;
     private String estado;
-    private int regX;
-    private int regY;
+    private ArrayList<String> segmentoTexto;
+    private int registradorX;
+    private int registradorY;
+
+    //Getters
+    public ArrayList<String> getSegmentoTexto() {
+        return segmentoTexto;
+    }
+    public int getPc() {
+        return pc;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public int getRegistradorX() {
+        return registradorX;
+    }
+
+    public int getRegistradorY() {
+        return registradorY;
+    }
 
     public String getNomeProcesso() {
         return this.nomeProcesso;
+    }
+
+    //Setters
+    public void setSegmentoTexto(String segmentoTexto) {
+        this.segmentoTexto.add(segmentoTexto);
     }
 
     public BCP(String nome, int id) {
@@ -16,7 +45,8 @@ public class BCP {
         this.id = id;
         this.pc = 0;
         this.estado = "Pronto";
-        this.regX = 0;
-        this.regY = 0;
+        this.registradorX = 0;
+        this.registradorY = 0;
+        this.segmentoTexto = new ArrayList<>();
     }
 }

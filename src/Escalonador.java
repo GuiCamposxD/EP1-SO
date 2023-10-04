@@ -1,48 +1,25 @@
-import estruturas.BCP;
-import estruturas.TabelaProcessos;
-
 import java.io.*;
-import java.util.*;
+import java.util.Scanner;
 
 public class Escalonador{
-    private static List<List<String>> programas = new ArrayList<>();
-    private static TabelaProcessos processos = new TabelaProcessos();
+    private int quantum;
 
-    public static void lerProgramas() {
-        String path = "./programas";
-        File pasta = new File(path);
+    public Escalonador() {
+        this.setQuantum();
+    }
 
-        if (pasta.isDirectory()) {
-            File[] arquivos = pasta.listFiles();
-
-            if (arquivos != null) {
-                Arrays.sort(arquivos, Comparator.comparing(File::getName));
-
-                for (int i = 0; i < arquivos.length; i++) {
-                    File arquivo = new File(arquivos[i].toURI());
-                    if (!arquivos[i].getName().equals("quantum.txt")) {
-                        programas.add(new ArrayList<>());
-
-                        try (BufferedReader leitor = new BufferedReader(new FileReader(arquivo))) {
-                            String linha;
-                            while ((linha = leitor.readLine()) != null) {
-                                programas.get(i).add(linha);
-                            }
-                            processos.insereTabelaProcessoProntos(new BCP(programas.get(i).get(0), i));
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
+    private void setQuantum() {
+        try (BufferedReader leitor = new BufferedReader(new FileReader("./programas/quantum.txt"))) {
+            String linha;
+            while ((linha = leitor.readLine()) != null) {
+                this.quantum = Integer.parseInt(linha);
             }
-        } else {
-            System.out.println("O caminho especificado não é uma pasta.");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
-    public static void main(String[] args) {
-        lerProgramas();
-
+    public void teste() {
         int quantum = 0;
 
         // Lê o arquivo do quantum e atribui a variavel

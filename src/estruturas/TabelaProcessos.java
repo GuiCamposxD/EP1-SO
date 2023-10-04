@@ -3,28 +3,21 @@ package estruturas;
 import java.util.ArrayList;
 
 public class TabelaProcessos {
-    public ArrayList<BCP> getTabelaProcessoProntos() {
-        return tabelaProcessoProntos;
-    }
+    private ArrayList<BCP> tabela;
 
-    public ArrayList<BCP> getTabelaProcessoBloqueados() {
-        return tabelaProcessoBloqueados;
+    //Getters
+    public ArrayList<BCP> getTabela() {
+        return tabela;
     }
-
-    private ArrayList<BCP> tabelaProcessoProntos;
-    private ArrayList<BCP> tabelaProcessoBloqueados;
 
     public TabelaProcessos() {
-        this.tabelaProcessoProntos = new ArrayList<>();
-        this.tabelaProcessoBloqueados = new ArrayList<>();
+        this.tabela = new ArrayList<>();
     }
 
-    public void insereTabelaProcessoProntos(BCP processo) {
-        if (processo != null) {
-            this.tabelaProcessoProntos.add(processo);
-            return;
-        }
 
-        throw new RuntimeException("Processo não existe!");
+    public void insereProcesso(BCP processo) {
+        if (processo == null) throw new RuntimeException("Processo não existe!");
+
+        tabela.add(processo);
     }
 }
