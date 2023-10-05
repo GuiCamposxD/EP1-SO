@@ -1,5 +1,7 @@
-import estruturas.BCP;
-import estruturas.ListaProcessos;
+package src;
+
+import src.estruturas.BCP;
+import src.estruturas.ListaProcessos;
 
 import java.io.*;
 import java.util.Iterator;

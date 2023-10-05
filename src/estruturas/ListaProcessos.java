@@ -1,4 +1,4 @@
-package estruturas;
+package src.estruturas;
 
 import java.util.ArrayList;
 

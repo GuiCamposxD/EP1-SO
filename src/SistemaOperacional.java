@@ -1,6 +1,8 @@
-import estruturas.BCP;
-import estruturas.ListaProcessos;
-import estruturas.TabelaProcessos;
+package src;
+
+import src.estruturas.BCP;
+import src.estruturas.ListaProcessos;
+import src.estruturas.TabelaProcessos;
 
 import java.io.BufferedReader;
 import java.io.File;
