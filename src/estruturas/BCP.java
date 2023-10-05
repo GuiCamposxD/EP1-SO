@@ -101,6 +101,10 @@ public class BCP {
         this.tempoEspera = tempoEspera;
     }
 
+    public void decrementaQuantumRestante() {
+        this.quantumRestante--;
+    }
+
     public void setQuantumRestante(int quantumRestante) {
         this.quantumRestante = quantumRestante;
     }

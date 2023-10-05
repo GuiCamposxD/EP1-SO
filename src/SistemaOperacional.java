@@ -16,6 +16,7 @@ public class SistemaOperacional {
     private final TabelaProcessos tabelaProcessos;
     private final ListaProcessos listaProcessosProntos;
     private final ListaProcessos listaProcessosBloqueados;
+    private int quantidadeProcessos;
     private int processosFinalizados;
     private int quantum;
 
@@ -31,10 +32,6 @@ public class SistemaOperacional {
     }
 
     // Getters
-    public Escalonador getEscalonador() {
-        return this.escalonador;
-    }
-
     public TabelaProcessos getTabelaProcessos() {
         return this.tabelaProcessos;
     }
@@ -45,6 +42,10 @@ public class SistemaOperacional {
 
     public ListaProcessos getProcessosBloqueados() {
         return this.listaProcessosBloqueados;
+    }
+
+    public int getQuantum() {
+        return quantum;
     }
 
     // Setters
@@ -68,6 +69,7 @@ public class SistemaOperacional {
 
         if (pasta.isDirectory()) {
             File[] arquivos = pasta.listFiles();
+            this.quantidadeProcessos = arquivos.length - 1;
 
             if (arquivos != null) {
                 Arrays.sort(arquivos, Comparator.comparing(File::getName));
@@ -92,7 +94,7 @@ public class SistemaOperacional {
                                 this.tabelaProcessos.getTabela().get(i).setSegmentoTexto(linha);
                             }
 
-                            this.getProcessosProntos().adicionaProcesso(this.tabelaProcessos.getTabela().get(i));
+                            this.listaProcessosProntos.adicionaProcesso(this.tabelaProcessos.getTabela().get(i));
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -105,7 +107,7 @@ public class SistemaOperacional {
     }
 
     public void executaProcessos(SistemaOperacional sistemaOperacional) {
-        while (processosFinalizados < this.tabelaProcessos.getTabela().size()) {
+        while (processosFinalizados != this.quantidadeProcessos) {
             this.escalonador.escalonaProcessos(sistemaOperacional);
         }
     }

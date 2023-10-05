@@ -5,5 +5,7 @@ public class Main {
         SistemaOperacional sistemaOperacional = new SistemaOperacional();
 
         sistemaOperacional.executaProcessos(sistemaOperacional);
+
+        System.out.println(sistemaOperacional);
     }
 }
