@@ -30,10 +30,6 @@ public class SistemaOperacional {
     }
 
     // Getters
-    public Escalonador getEscalonador() {
-        return this.escalonador;
-    }
-
     public TabelaProcessos getTabelaProcessos() {
         return this.tabelaProcessos;
     }
@@ -44,6 +40,10 @@ public class SistemaOperacional {
 
     public ListaProcessos getProcessosBloqueados() {
         return this.listaProcessosBloqueados;
+    }
+
+    public int getQuantum() {
+        return quantum;
     }
 
     // Setters
@@ -92,7 +92,7 @@ public class SistemaOperacional {
                                 this.tabelaProcessos.getTabela().get(i).setSegmentoTexto(linha);
                             }
 
-                            this.getProcessosProntos().adicionaProcesso(this.tabelaProcessos.getTabela().get(i));
+                            this.listaProcessosProntos.adicionaProcesso(this.tabelaProcessos.getTabela().get(i));
                         } catch (IOException e) {
                             e.printStackTrace();
                         }

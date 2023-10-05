@@ -105,6 +105,10 @@ public class BCP {
         this.quantumRestante--;
     }
 
+    public void setQuantumRestante(int quantumRestante) {
+        this.quantumRestante = quantumRestante;
+    }
+
     public BCP(String nome, int id, int quantum) {
         this.nomeProcesso = nome;
         this.id = id;
