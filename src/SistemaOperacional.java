@@ -13,6 +13,7 @@ import java.util.Comparator;
 
 public class SistemaOperacional {
     private Escalonador escalonador;
+    private final Logger logger;
     private final TabelaProcessos tabelaProcessos;
     private final ListaProcessos listaProcessosProntos;
     private final ListaProcessos listaProcessosBloqueados;
@@ -27,11 +28,15 @@ public class SistemaOperacional {
         this.listaProcessosBloqueados = new ListaProcessos();
         this.processosFinalizados = 0;
         this.setQuantum();
+        this.logger = new Logger(quantum);
 
         this.lerProgramas();
     }
 
     // Getters
+    public Logger getLogger() {
+        return this.logger;
+    }
     public TabelaProcessos getTabelaProcessos() {
         return this.tabelaProcessos;
     }
@@ -69,35 +74,30 @@ public class SistemaOperacional {
 
         if (pasta.isDirectory()) {
             File[] arquivos = pasta.listFiles();
+            assert arquivos != null;
             this.quantidadeProcessos = arquivos.length - 1;
 
-            if (arquivos != null) {
-                Arrays.sort(arquivos, Comparator.comparing(File::getName));
+            Arrays.sort(arquivos, Comparator.comparing(File::getName));
 
-                for (int i = 0; i < arquivos.length; i++) {
-                    File arquivo = new File(arquivos[i].toURI());
-                    if (!arquivos[i].getName().equals("quantum.txt")) {
+            for (int i = 0; i < arquivos.length; i++) {
+                File arquivo = new File(arquivos[i].toURI());
+                if (!arquivos[i].getName().equals("quantum.txt")) {
 
-                        try (BufferedReader leitor = new BufferedReader(new FileReader(arquivo))) {
-                            this.tabelaProcessos.insereProcesso(
-                                    new BCP(arquivos[i].getName(), i, this.quantum)
-                            );
+                    try (BufferedReader leitor = new BufferedReader(new FileReader(arquivo))) {
+                        String linha;
+                        linha = leitor.readLine();
+                        this.tabelaProcessos.insereProcesso(
+                                new BCP(arquivos[i].getName(), linha, i, this.quantum)
+                        );
 
-                            String linha;
-                            boolean primeiraLinha = true;
-
-                            while ((linha = leitor.readLine()) != null) {
-                                if (primeiraLinha) {
-                                    primeiraLinha = false;
-                                    continue;
-                                }
-                                this.tabelaProcessos.getTabela().get(i).setSegmentoTexto(linha);
-                            }
-
-                            this.listaProcessosProntos.adicionaProcesso(this.tabelaProcessos.getTabela().get(i));
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                        while ((linha = leitor.readLine()) != null) {
+                            this.tabelaProcessos.getTabela().get(i).setSegmentoTexto(linha);
                         }
+
+                        this.listaProcessosProntos.adicionaProcesso(this.tabelaProcessos.getTabela().get(i));
+                        this.logger.logCarregaProcessos(this.tabelaProcessos.getTabela().get(i));
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
                 }
             }
@@ -106,10 +106,11 @@ public class SistemaOperacional {
         }
     }
 
-    public void executaProcessos(SistemaOperacional sistemaOperacional) {
+    public void executaProcessos(SistemaOperacional sistemaOperacional, Logger logger) {
         while (processosFinalizados != this.quantidadeProcessos) {
-            this.escalonador.escalonaProcessos(sistemaOperacional);
+            this.escalonador.escalonaProcessos(sistemaOperacional, logger);
         }
+        logger.logSaida(sistemaOperacional);
     }
 
     public void incrementaProcessosFinalizados() {

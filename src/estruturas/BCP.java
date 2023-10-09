@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class BCP {
     private final String nomeProcesso;
+    private final String nomePrograma;
     private final int id;
     private int pc;
     private String estado;
@@ -109,8 +110,9 @@ public class BCP {
         this.quantumRestante = quantumRestante;
     }
 
-    public BCP(String nome, int id, int quantum) {
-        this.nomeProcesso = nome;
+    public BCP(String nomeProcesso, String nomePrograma, int id, int quantum) {
+        this.nomeProcesso = nomeProcesso;
+        this.nomePrograma = nomePrograma;
         this.id = id;
         this.pc = 0;
         this.estado = "Pronto";
@@ -124,5 +126,9 @@ public class BCP {
 
     public void decrementaTempoEspera() {
         this.tempoEspera--;
+    }
+
+    public String getNomePrograma() {
+        return nomePrograma;
     }
 }
