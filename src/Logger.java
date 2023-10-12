@@ -7,10 +7,14 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class Logger {
+    private int trocasRealizadas;
+    private int instruncoesRealizadas;
     private String logFileName;
     File log;
     FileWriter logWriter;
     public Logger(int quantum){
+        this.trocasRealizadas = 0;
+        this.instruncoesRealizadas = 0;
         String fileName;
         if(quantum < 10){
             logFileName = "logs/log0" + quantum + ".txt";
@@ -52,9 +56,11 @@ public class Logger {
     }
 
     void logInterrompendoProcessos(BCP processo){
+        instruncoesRealizadas += processo.getQuantumRestante();
         try {
+            this.trocasRealizadas++;
             logWriter = new FileWriter(log, true);
-            logWriter.write("Interrompendo " + processo.getNomePrograma() + " após " + processo.getPc() + " instruções\n");
+            logWriter.write("Interrompendo " + processo.getNomePrograma() + " após " + processo.getQuantumRestante() + " instruções\n");
             logWriter.close();
         } catch (IOException e){
             e.printStackTrace();
@@ -84,8 +90,8 @@ public class Logger {
     void logSaida(SistemaOperacional sistemaOperacional){
         try {
             logWriter = new FileWriter(log, true);
-            logWriter.write("MEDIA DE TROCAS: " + "\n");
-            logWriter.write("MEDIA DE INSTRUCOES: " + "\n");
+            logWriter.write("MEDIA DE TROCAS: " + ((float) trocasRealizadas)/( (float) sistemaOperacional.getQuantidadeProcessos()) + "\n");
+            logWriter.write("MEDIA DE INSTRUCOES: " + ((float) instruncoesRealizadas)/( (float) sistemaOperacional.getQuantidadeProcessos()) + "\n");
             logWriter.write("QUANTUM: " + sistemaOperacional.getQuantum() + "\n");
             logWriter.close();
         } catch (IOException e){

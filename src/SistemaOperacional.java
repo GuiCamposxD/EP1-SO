@@ -116,4 +116,7 @@ public class SistemaOperacional {
     public void incrementaProcessosFinalizados() {
         this.processosFinalizados++;
     }
+    public int getQuantidadeProcessos() {
+        return quantidadeProcessos;
+    }
 }
