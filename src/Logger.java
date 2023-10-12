@@ -55,8 +55,8 @@ public class Logger {
         }
     }
 
-    void logInterrompendoProcessos(BCP processo){
-        instruncoesRealizadas += processo.getQuantumRestante();
+    void logInterrompendoProcessos(BCP processo, SistemaOperacional sistemaOperacional){
+        instruncoesRealizadas += sistemaOperacional.getQuantum() - processo.getQuantumRestante();
         try {
             this.trocasRealizadas++;
             logWriter = new FileWriter(log, true);

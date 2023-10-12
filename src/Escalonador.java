@@ -56,7 +56,7 @@ public class Escalonador{
 
             if (processoExecutando.getQuantumRestante() == 0){
                 colocaProcessoListaPronto(processoExecutando, sistemaOperacional);
-                logger.logInterrompendoProcessos(processoExecutando);
+                logger.logInterrompendoProcessos(processoExecutando, sistemaOperacional);
             }
         }
     }
@@ -78,7 +78,7 @@ public class Escalonador{
         processoExecutando.setEstado("Bloqueado");
         processoExecutando.setTempoEspera(sistemaOperacional.getQuantum());
         processoExecutando.incrementaPc();
-        logger.logInterrompendoProcessos(processoExecutando);
+        logger.logInterrompendoProcessos(processoExecutando, sistemaOperacional);
     }
 
     private void lidaComando(BCP processoExecutando) {
@@ -129,38 +129,4 @@ public class Escalonador{
             }
         }
     }
-//    public void teste() {
-//        int quantum = 0;
-//
-//        // Lê o arquivo do quantum e atribui a variavel
-//        File arqQt = new File("./programas/quantum.txt");
-//
-//        try {
-//            Scanner ltrQt = new Scanner(arqQt);
-//            quantum = Integer.parseInt(ltrQt.nextLine());
-//
-//            ltrQt.close();
-//        } catch(FileNotFoundException e) {
-//            System.out.println("Não foi possível ler o arquivo quantum.");
-//            e.printStackTrace();
-//        }
-//
-//        // Cria o arquivo LogXX.txt
-//        String pathLog = "./logs/";
-//
-//        if (quantum < 10) {
-//            pathLog += "Log0" + quantum + ".txt";
-//        } else {
-//            pathLog += "Log" + quantum + ".txt";
-//        }
-//
-//        File arqLog = new File(pathLog);
-//
-//        try {
-//            arqLog.createNewFile();
-//        } catch (IOException e) {
-//            System.out.println("Não foi possível criar o arquivo LogXX");
-//            e.printStackTrace();
-//        }
-//    }
 }
