@@ -8,14 +8,6 @@ import src.estruturas.ListaProcessos;
 import java.util.Iterator;
 
 public class Escalonador{
-    public void incrementaProcessosExecutadosDosProcessosBloqueados(SistemaOperacional sistemaOperacional) {
-        ListaProcessos processosBloqueados = sistemaOperacional.getProcessosBloqueados();
-
-        for (BCP processo : processosBloqueados.getFila()) {
-            processo.incrementaNProcessosExecutadosEnquantoBloqueado();
-        }
-    }
-
     public void escalonaProcessos(SistemaOperacional sistemaOperacional, Logger logger) {
         ListaProcessos processosProntos = sistemaOperacional.getProcessosProntos();
         ListaProcessos processosBloqueados = sistemaOperacional.getProcessosBloqueados();
@@ -57,6 +49,7 @@ public class Escalonador{
             if (processoExecutando.getQuantumRestante() == 0){
                 colocaProcessoListaPronto(processoExecutando, sistemaOperacional);
                 logger.logInterrompendoProcessos(processoExecutando, sistemaOperacional);
+                break;
             }
         }
     }
@@ -128,5 +121,11 @@ public class Escalonador{
                 iterator.remove();
             }
         }
+    }
+
+    public static void main(String[] args) {
+        SistemaOperacional sistemaOperacional = new SistemaOperacional();
+
+        sistemaOperacional.executaProcessos(sistemaOperacional, sistemaOperacional.getLogger());
     }
 }
