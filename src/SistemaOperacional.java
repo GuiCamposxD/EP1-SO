@@ -69,8 +69,9 @@ public class SistemaOperacional {
 
     // Setters
     public void incrementaTrocasRealizadas() {
-        this.totalDeInstrucoesExecutadas += 1;
+        this.trocasRealizadas += 1;
     }
+
     public void incrementaTotalDeInstrucoesExecutadas() {
         this.totalDeInstrucoesExecutadas += 1;
     }

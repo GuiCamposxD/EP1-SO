@@ -105,11 +105,12 @@ public class Escalonador{
             if (primeiraLetraComando == 'S') {
                 processoExecutando.setEstado("Finalizado");
 
+                sistemaOperacional.getTabelaProcessos().getTabela().remove(processoExecutando);
 
                 sistemaOperacional.incrementaTotalDeInstrucoesExecutadas();
-                sistemaOperacional.getTabelaProcessos().getTabela().remove(processoExecutando);
-                sistemaOperacional.incrementaProcessosFinalizados();
+                sistemaOperacional.incrementaTrocasRealizadas();
                 sistemaOperacional.incrementaQuantidadeQuantum();
+                sistemaOperacional.incrementaProcessosFinalizados();
 
                 logger.logFinalizaProcessos(processoExecutando);
                 break;
@@ -129,9 +130,10 @@ public class Escalonador{
 
             if (primeiraLetraComando == 'C') {
                 lidaComando(processoExecutando);
-                processoExecutando.incrementaInstrucoesExecutadas();
+                sistemaOperacional.incrementaTotalDeInstrucoesExecutadas();
             } else if (primeiraLetraComando == 'X' || primeiraLetraComando == 'Y') {
                 lidaRegistradores(processoExecutando, comando);
+                sistemaOperacional.incrementaTotalDeInstrucoesExecutadas();
             }
 
             processoExecutando.decrementaQuantumRestante();
@@ -141,7 +143,6 @@ public class Escalonador{
 
                 logger.logInterrompendoProcessos(processoExecutando);
 
-                sistemaOperacional.incrementaTotalDeInstrucoesExecutadas();
                 sistemaOperacional.incrementaTrocasRealizadas();
                 sistemaOperacional.incrementaQuantidadeQuantum();
 
