@@ -12,11 +12,11 @@ public class Escalonador{
         }
 
         logger.logESProcessos(processoExecutando);
-        processoExecutando.setFezES(true);
         processoExecutando.setEstado("Bloqueado");
         processoExecutando.setTempoEspera(sistemaOperacional.getQuantum());
         processoExecutando.incrementaPc();
-        logger.logInterrompendoProcessos(processoExecutando, sistemaOperacional);
+
+        logger.logInterrompendoProcessos(processoExecutando);
     }
 
     private void lidaComando(BCP processoExecutando) {
@@ -41,14 +41,15 @@ public class Escalonador{
 
     private void colocaBloqueadoEmPronto(
         ListaProcessos processosBloqueados,
-        ListaProcessos processosProntos
+        ListaProcessos processosProntos,
+        SistemaOperacional sistemaOperacional
     ) {
         Iterator<BCP> iterator = processosBloqueados.getFila().iterator();
         while (iterator.hasNext()) {
             BCP processo = iterator.next();
             if (processo.getTempoEspera() == 0 || processo.getNProcessosExecutadosEnquantoBloqueado() >= 2) {
                 processo.setTempoEspera(0);
-                processo.setQuantumRestante(3);
+                processo.setQuantumRestante(sistemaOperacional.getQuantum());
 
                 processosProntos.getFila().addLast(processo);
                 iterator.remove();
@@ -63,11 +64,11 @@ public class Escalonador{
     ) {
         if (processosProntos.getFila().isEmpty() && !processosBloqueados.getFila().isEmpty()) {
             for (BCP processo : processosBloqueados.getFila()) {
-                processo.setTempoEspera(0);
+                processo.decrementaTempoEspera();
                 processo.setQuantumRestante(sistemaOperacional.getQuantum());
             }
 
-            this.colocaBloqueadoEmPronto(processosBloqueados, processosProntos);
+            this.colocaBloqueadoEmPronto(processosBloqueados, processosProntos, sistemaOperacional);
             return;
         }
 
@@ -76,7 +77,7 @@ public class Escalonador{
             processo.decrementaTempoEspera();
         }
 
-        this.colocaBloqueadoEmPronto(processosBloqueados, processosProntos);
+        this.colocaBloqueadoEmPronto(processosBloqueados, processosProntos, sistemaOperacional);
     }
 
     public void colocaProcessoListaPronto(BCP processo, SistemaOperacional sistemaOperacional) {
@@ -103,33 +104,47 @@ public class Escalonador{
 
             if (primeiraLetraComando == 'S') {
                 processoExecutando.setEstado("Finalizado");
-                logger.logFinalizaProcessos(processoExecutando);
+
+
+                sistemaOperacional.incrementaTotalDeInstrucoesExecutadas();
                 sistemaOperacional.getTabelaProcessos().getTabela().remove(processoExecutando);
                 sistemaOperacional.incrementaProcessosFinalizados();
                 sistemaOperacional.incrementaQuantidadeQuantum();
+
+                logger.logFinalizaProcessos(processoExecutando);
                 break;
             }
 
             if (primeiraLetraComando == 'E') {
                 lidaEntradaSaida(processoExecutando, processosBloqueados, sistemaOperacional, logger);
+
                 processosBloqueados.getFila().addLast(processoExecutando);
+
+                sistemaOperacional.incrementaTotalDeInstrucoesExecutadas();
+                sistemaOperacional.incrementaTrocasRealizadas();
                 sistemaOperacional.incrementaQuantidadeQuantum();
+
                 break;
             }
 
             if (primeiraLetraComando == 'C') {
                 lidaComando(processoExecutando);
-                if (!processoExecutando.getFezES())  processoExecutando.incrementaInstrucoesExecutadas();
+                processoExecutando.incrementaInstrucoesExecutadas();
             } else if (primeiraLetraComando == 'X' || primeiraLetraComando == 'Y') {
                 lidaRegistradores(processoExecutando, comando);
             }
 
             processoExecutando.decrementaQuantumRestante();
 
-            if (processoExecutando.getQuantumRestante() == 0){
+            if (processoExecutando.getQuantumRestante() == 0) {
                 colocaProcessoListaPronto(processoExecutando, sistemaOperacional);
-                logger.logInterrompendoProcessos(processoExecutando, sistemaOperacional);
+
+                logger.logInterrompendoProcessos(processoExecutando);
+
+                sistemaOperacional.incrementaTotalDeInstrucoesExecutadas();
+                sistemaOperacional.incrementaTrocasRealizadas();
                 sistemaOperacional.incrementaQuantidadeQuantum();
+
                 break;
             }
         }
