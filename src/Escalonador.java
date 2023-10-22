@@ -8,59 +8,6 @@ import src.estruturas.ListaProcessos;
 import java.util.Iterator;
 
 public class Escalonador{
-    public void escalonaProcessos(SistemaOperacional sistemaOperacional, Logger logger) {
-        ListaProcessos processosProntos = sistemaOperacional.getProcessosProntos();
-        ListaProcessos processosBloqueados = sistemaOperacional.getProcessosBloqueados();
-        BCP processoExecutando = processosProntos.getFila().get(0);
-
-        processoExecutando.setEstado("Executando");
-        logger.logExecutandoProcessos(processosProntos.getFila().get(0));
-        processosProntos.getFila().remove(0);
-
-        lidaProcessosBloqueados(processosBloqueados, processosProntos);
-
-        while (processoExecutando.getQuantumRestante() > 0) {
-            String comando = processoExecutando.getSegmentoTexto().get(processoExecutando.getPc());
-            char primeiraLetraComando = comando.charAt(0);
-
-            if (primeiraLetraComando == 'S') {
-                processoExecutando.setEstado("Finalizado");
-                logger.logFinalizaProcessos(processoExecutando);
-                sistemaOperacional.getTabelaProcessos().getTabela().remove(processoExecutando);
-                sistemaOperacional.incrementaProcessosFinalizados();
-                break;
-            }
-
-            if (primeiraLetraComando == 'E') {
-                lidaEntradaSaida(processoExecutando, processosBloqueados, sistemaOperacional, logger);
-                processosBloqueados.getFila().add(processoExecutando);
-                break;
-            }
-
-            if (primeiraLetraComando == 'C') {
-                lidaComando(processoExecutando);
-                if (!processoExecutando.getFezES())  processoExecutando.incrementaInstrucoesExecutadas();
-            } else if (primeiraLetraComando == 'X' || primeiraLetraComando == 'Y') {
-                lidaRegistradores(processoExecutando, comando);
-            }
-
-            processoExecutando.decrementaQuantumRestante();
-
-            if (processoExecutando.getQuantumRestante() == 0){
-                colocaProcessoListaPronto(processoExecutando, sistemaOperacional);
-                logger.logInterrompendoProcessos(processoExecutando, sistemaOperacional);
-                break;
-            }
-        }
-    }
-
-    public void colocaProcessoListaPronto(BCP processo, SistemaOperacional sistemaOperacional) {
-        ListaProcessos processosProntos = sistemaOperacional.getProcessosProntos();
-
-        processosProntos.getFila().add(processo);
-        processo.setQuantumRestante(sistemaOperacional.getQuantum());
-    }
-
     private void lidaEntradaSaida(BCP processoExecutando, ListaProcessos processosBloqueados, SistemaOperacional sistemaOperacional, Logger logger) {
         for (BCP processo : processosBloqueados.getFila()) {
             processo.decrementaTempoEspera();
@@ -119,6 +66,59 @@ public class Escalonador{
 
                 processosProntos.getFila().add(processo);
                 iterator.remove();
+            }
+        }
+    }
+
+    public void colocaProcessoListaPronto(BCP processo, SistemaOperacional sistemaOperacional) {
+        ListaProcessos processosProntos = sistemaOperacional.getProcessosProntos();
+
+        processosProntos.getFila().add(processo);
+        processo.setQuantumRestante(sistemaOperacional.getQuantum());
+    }
+
+    public void escalonaProcessos(SistemaOperacional sistemaOperacional, Logger logger) {
+        ListaProcessos processosProntos = sistemaOperacional.getProcessosProntos();
+        ListaProcessos processosBloqueados = sistemaOperacional.getProcessosBloqueados();
+        BCP processoExecutando = processosProntos.getFila().get(0);
+
+        processoExecutando.setEstado("Executando");
+        logger.logExecutandoProcessos(processosProntos.getFila().get(0));
+        processosProntos.getFila().remove(0);
+
+        lidaProcessosBloqueados(processosBloqueados, processosProntos);
+
+        while (processoExecutando.getQuantumRestante() > 0) {
+            String comando = processoExecutando.getSegmentoTexto().get(processoExecutando.getPc());
+            char primeiraLetraComando = comando.charAt(0);
+
+            if (primeiraLetraComando == 'S') {
+                processoExecutando.setEstado("Finalizado");
+                logger.logFinalizaProcessos(processoExecutando);
+                sistemaOperacional.getTabelaProcessos().getTabela().remove(processoExecutando);
+                sistemaOperacional.incrementaProcessosFinalizados();
+                break;
+            }
+
+            if (primeiraLetraComando == 'E') {
+                lidaEntradaSaida(processoExecutando, processosBloqueados, sistemaOperacional, logger);
+                processosBloqueados.getFila().add(processoExecutando);
+                break;
+            }
+
+            if (primeiraLetraComando == 'C') {
+                lidaComando(processoExecutando);
+                if (!processoExecutando.getFezES())  processoExecutando.incrementaInstrucoesExecutadas();
+            } else if (primeiraLetraComando == 'X' || primeiraLetraComando == 'Y') {
+                lidaRegistradores(processoExecutando, comando);
+            }
+
+            processoExecutando.decrementaQuantumRestante();
+
+            if (processoExecutando.getQuantumRestante() == 0){
+                colocaProcessoListaPronto(processoExecutando, sistemaOperacional);
+                logger.logInterrompendoProcessos(processoExecutando, sistemaOperacional);
+                break;
             }
         }
     }
