@@ -7,19 +7,15 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class Logger {
-    private int trocasRealizadas;
-    private int instruncoesRealizadas;
     private String logFileName;
     File log;
     FileWriter logWriter;
+
     public Logger(int quantum){
-        this.trocasRealizadas = 0;
-        this.instruncoesRealizadas = 0;
-        String fileName;
         if(quantum < 10){
-            logFileName = "logs/log0" + quantum + ".txt";
+            this.logFileName = "logs/log0" + quantum + ".txt";
         } else{
-            logFileName = "logs/log" + quantum + ".txt";
+            this.logFileName = "logs/log" + quantum + ".txt";
         }
 
         log = new File(logFileName);
@@ -55,9 +51,7 @@ public class Logger {
         }
     }
 
-    void logInterrompendoProcessos(BCP processo, SistemaOperacional sistemaOperacional){
-        this.trocasRealizadas++;
-        instruncoesRealizadas += sistemaOperacional.getQuantum() - processo.getQuantumRestante();
+    void logInterrompendoProcessos(BCP processo){
         try {
             logWriter = new FileWriter(log, true);
             logWriter.write("Interrompendo " + processo.getNomePrograma() + " após " + processo.getQuantumRestante() + " instruções\n");
@@ -90,8 +84,10 @@ public class Logger {
     void logSaida(SistemaOperacional sistemaOperacional){
         try {
             logWriter = new FileWriter(log, true);
-            logWriter.write("MEDIA DE TROCAS: " + ((float) trocasRealizadas)/( (float) sistemaOperacional.getQuantidadeProcessos()) + "\n");
-            logWriter.write("MEDIA DE INSTRUCOES: " + ((float) instruncoesRealizadas)/( (float) sistemaOperacional.getQuantidadeQuantum()) + "\n");
+            logWriter.write("MEDIA DE TROCAS: "
+                + ((float) sistemaOperacional.getTrocasRealizadas()) / ((float)sistemaOperacional.getQuantidadeProcessos()) + "\n");
+            logWriter.write("MEDIA DE INSTRUCOES: "
+                + ((float) sistemaOperacional.getTotalDeInstrucoesExecutadas()) / ((float)sistemaOperacional.getQuantidadeQuantum()) + "\n");
             logWriter.write("QUANTUM: " + sistemaOperacional.getQuantum() + "\n");
             logWriter.close();
         } catch (IOException e){

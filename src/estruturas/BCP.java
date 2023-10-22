@@ -8,11 +8,9 @@ public class BCP {
     private final int id;
     private int pc;
     private String estado;
-    private ArrayList<String> segmentoTexto;
+    private final ArrayList<String> segmentoTexto;
     private int registradorX;
     private int registradorY;
-    private boolean fezES;
-    private int instrucoesExecutadas;
     private int tempoEspera;
     private int nProcessosExecutadosEnquantoBloqueado;
     private int quantumRestante;
@@ -43,14 +41,6 @@ public class BCP {
 
     public int getId() {
         return id;
-    }
-
-    public boolean getFezES() {
-        return fezES;
-    }
-
-    public int getInstrucoesExecutadas() {
-        return instrucoesExecutadas;
     }
 
     public int getTempoEspera() {
@@ -86,16 +76,8 @@ public class BCP {
         this.pc++;
     }
 
-    public void incrementaInstrucoesExecutadas() {
-        this.instrucoesExecutadas++;
-    }
-
     public void incrementaNProcessosExecutadosEnquantoBloqueado() {
         this.nProcessosExecutadosEnquantoBloqueado++;
-    }
-
-    public void setFezES(boolean fezES) {
-        this.fezES = fezES;
     }
 
     public void setTempoEspera(int tempoEspera) {
@@ -119,8 +101,6 @@ public class BCP {
         this.registradorX = 0;
         this.registradorY = 0;
         this.segmentoTexto = new ArrayList<>();
-        this.fezES = false;
-        this.instrucoesExecutadas = 0;
         this.quantumRestante = quantum;
     }
 

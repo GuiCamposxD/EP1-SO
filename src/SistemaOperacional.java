@@ -21,6 +21,8 @@ public class SistemaOperacional {
     private int processosFinalizados;
     private int quantum;
     private int quantidadeQuantum;
+    private int totalDeInstrucoesExecutadas;
+    private int trocasRealizadas;
 
     public SistemaOperacional() {
         this.escalonador = new Escalonador();
@@ -35,6 +37,15 @@ public class SistemaOperacional {
     }
 
     // Getters
+
+    public int getTotalDeInstrucoesExecutadas() {
+        return totalDeInstrucoesExecutadas;
+    }
+
+    public int getTrocasRealizadas() {
+        return trocasRealizadas;
+    }
+
     public Logger getLogger() {
         return this.logger;
     }
@@ -57,6 +68,13 @@ public class SistemaOperacional {
     }
 
     // Setters
+    public void incrementaTrocasRealizadas() {
+        this.trocasRealizadas += 1;
+    }
+
+    public void incrementaTotalDeInstrucoesExecutadas() {
+        this.totalDeInstrucoesExecutadas += 1;
+    }
     private void setQuantum() {
         try (BufferedReader leitor = new BufferedReader(new FileReader("./programas/quantum.txt"))) {
             String linha;
