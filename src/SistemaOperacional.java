@@ -64,9 +64,6 @@ public class SistemaOperacional {
             throw new RuntimeException("Não foi possível ler o quantum");
         }
     }
-    public void setProcessosTerminados(int processosFinalizados) {
-        this.processosFinalizados = processosFinalizados;
-    }
 
     private void lerProgramas() {
         String path = "./programas";
