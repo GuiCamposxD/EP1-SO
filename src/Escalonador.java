@@ -64,7 +64,7 @@ public class Escalonador{
                 processo.setTempoEspera(0);
                 processo.setQuantumRestante(3);
 
-                processosProntos.getFila().add(processo);
+                processosProntos.getFila().addLast(processo);
                 iterator.remove();
             }
         }
@@ -73,7 +73,7 @@ public class Escalonador{
     public void colocaProcessoListaPronto(BCP processo, SistemaOperacional sistemaOperacional) {
         ListaProcessos processosProntos = sistemaOperacional.getProcessosProntos();
 
-        processosProntos.getFila().add(processo);
+        processosProntos.getFila().addLast(processo);
         processo.setQuantumRestante(sistemaOperacional.getQuantum());
     }
 
@@ -102,7 +102,7 @@ public class Escalonador{
 
             if (primeiraLetraComando == 'E') {
                 lidaEntradaSaida(processoExecutando, processosBloqueados, sistemaOperacional, logger);
-                processosBloqueados.getFila().add(processoExecutando);
+                processosBloqueados.getFila().addLast(processoExecutando);
                 break;
             }
 

@@ -1,17 +1,17 @@
 package src.estruturas;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class ListaProcessos {
-    private final ArrayList<BCP> fila;
+    private final LinkedList<BCP> fila;
 
     // Getters
-    public ArrayList<BCP> getFila() {
+    public LinkedList<BCP> getFila() {
         return fila;
     }
 
     public ListaProcessos() {
-        this.fila = new ArrayList<>();
+        this.fila = new LinkedList<>();
     }
 
     public void adicionaProcesso(BCP processo) {
