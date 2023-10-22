@@ -47,8 +47,7 @@ public class Escalonador{
         Iterator<BCP> iterator = processosBloqueados.getFila().iterator();
         while (iterator.hasNext()) {
             BCP processo = iterator.next();
-            if (processo.getTempoEspera() == 0 || processo.getNProcessosExecutadosEnquantoBloqueado() >= 2) {
-                processo.setTempoEspera(0);
+            if (processo.getTempoEspera() == 0) {
                 processo.setQuantumRestante(sistemaOperacional.getQuantum());
 
                 processosProntos.getFila().addLast(processo);
@@ -63,10 +62,11 @@ public class Escalonador{
             SistemaOperacional sistemaOperacional
     ) {
 
-        while (processosBloqueados.getFila().getFirst().getTempoEspera() > 0) {
-            for (BCP processo : processosBloqueados.getFila()) {
-                processo.incrementaNProcessosExecutadosEnquantoBloqueado();
-                processo.decrementaTempoEspera();
+        if (!processosBloqueados.getFila().isEmpty()) {
+            while (processosBloqueados.getFila().getFirst().getTempoEspera() > 0) {
+                for (BCP processo : processosBloqueados.getFila()) {
+                    processo.decrementaTempoEspera();
+                }
             }
         }
 

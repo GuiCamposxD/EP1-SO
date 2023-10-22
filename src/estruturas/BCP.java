@@ -12,7 +12,6 @@ public class BCP {
     private int registradorX;
     private int registradorY;
     private int tempoEspera;
-    private int nProcessosExecutadosEnquantoBloqueado;
     private int quantumRestante;
 
     //Getters
@@ -47,10 +46,6 @@ public class BCP {
         return tempoEspera;
     }
 
-    public int getNProcessosExecutadosEnquantoBloqueado() {
-        return nProcessosExecutadosEnquantoBloqueado;
-    }
-
     public int getQuantumRestante() {
         return quantumRestante;
     }
@@ -74,10 +69,6 @@ public class BCP {
 
     public void incrementaPc() {
         this.pc++;
-    }
-
-    public void incrementaNProcessosExecutadosEnquantoBloqueado() {
-        this.nProcessosExecutadosEnquantoBloqueado++;
     }
 
     public void setTempoEspera(int tempoEspera) {
