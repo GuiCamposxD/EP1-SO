@@ -61,19 +61,12 @@ public class Escalonador{
             ListaProcessos processosProntos,
             SistemaOperacional sistemaOperacional
     ) {
-        if (processosProntos.getFila().isEmpty() && !processosBloqueados.getFila().isEmpty()) {
+
+        while (processosBloqueados.getFila().getFirst().getTempoEspera() > 0) {
             for (BCP processo : processosBloqueados.getFila()) {
-                processo.setTempoEspera(0);
-                processo.setQuantumRestante(sistemaOperacional.getQuantum());
+                processo.incrementaNProcessosExecutadosEnquantoBloqueado();
+                processo.decrementaTempoEspera();
             }
-
-            this.colocaBloqueadoEmPronto(processosBloqueados, processosProntos);
-            return;
-        }
-
-        for (BCP processo : processosBloqueados.getFila()) {
-            processo.incrementaNProcessosExecutadosEnquantoBloqueado();
-            processo.decrementaTempoEspera();
         }
 
         this.colocaBloqueadoEmPronto(processosBloqueados, processosProntos);
