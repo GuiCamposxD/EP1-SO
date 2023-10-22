@@ -14,7 +14,6 @@ public class TabelaProcessos {
         this.tabela = new ArrayList<>();
     }
 
-
     public void insereProcesso(BCP processo) {
         if (processo == null) throw new RuntimeException("Processo não existe!");
 
