@@ -95,12 +95,14 @@ public class Escalonador{
                 logger.logFinalizaProcessos(processoExecutando);
                 sistemaOperacional.getTabelaProcessos().getTabela().remove(processoExecutando);
                 sistemaOperacional.incrementaProcessosFinalizados();
+                sistemaOperacional.incrementaQuantidadeQuantum();
                 break;
             }
 
             if (primeiraLetraComando == 'E') {
                 lidaEntradaSaida(processoExecutando, processosBloqueados, sistemaOperacional, logger);
                 processosBloqueados.getFila().addLast(processoExecutando);
+                sistemaOperacional.incrementaQuantidadeQuantum();
                 break;
             }
 
@@ -116,6 +118,7 @@ public class Escalonador{
             if (processoExecutando.getQuantumRestante() == 0){
                 colocaProcessoListaPronto(processoExecutando, sistemaOperacional);
                 logger.logInterrompendoProcessos(processoExecutando, sistemaOperacional);
+                sistemaOperacional.incrementaQuantidadeQuantum();
                 break;
             }
         }

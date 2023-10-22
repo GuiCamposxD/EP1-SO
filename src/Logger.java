@@ -91,7 +91,7 @@ public class Logger {
         try {
             logWriter = new FileWriter(log, true);
             logWriter.write("MEDIA DE TROCAS: " + ((float) trocasRealizadas)/( (float) sistemaOperacional.getQuantidadeProcessos()) + "\n");
-            logWriter.write("MEDIA DE INSTRUCOES: " + ((float) instruncoesRealizadas)/( (float) sistemaOperacional.getQuantidadeProcessos()) + "\n");
+            logWriter.write("MEDIA DE INSTRUCOES: " + ((float) instruncoesRealizadas)/( (float) sistemaOperacional.getQuantidadeQuantum()) + "\n");
             logWriter.write("QUANTUM: " + sistemaOperacional.getQuantum() + "\n");
             logWriter.close();
         } catch (IOException e){

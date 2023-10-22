@@ -20,6 +20,7 @@ public class SistemaOperacional {
     private int quantidadeProcessos;
     private int processosFinalizados;
     private int quantum;
+    private int quantidadeQuantum;
 
     public SistemaOperacional() {
         this.escalonador = new Escalonador();
@@ -48,7 +49,9 @@ public class SistemaOperacional {
     public ListaProcessos getProcessosBloqueados() {
         return this.listaProcessosBloqueados;
     }
-
+    public int getQuantidadeQuantum(){
+        return this.quantidadeQuantum;
+    }
     public int getQuantum() {
         return quantum;
     }
@@ -112,6 +115,9 @@ public class SistemaOperacional {
 
     public void incrementaProcessosFinalizados() {
         this.processosFinalizados++;
+    }
+    public void incrementaQuantidadeQuantum(){
+        this.quantidadeQuantum++;
     }
     public int getQuantidadeProcessos() {
         return quantidadeProcessos;
