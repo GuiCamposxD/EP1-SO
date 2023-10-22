@@ -39,22 +39,10 @@ public class Escalonador{
         processoExecutando.incrementaPc();
     }
 
-    private void lidaProcessosBloqueados(ListaProcessos processosBloqueados, ListaProcessos processosProntos) {
-        if (processosProntos.getFila().isEmpty() && !processosBloqueados.getFila().isEmpty()) {
-            for (BCP processo : processosBloqueados.getFila()) {
-                processo.setTempoEspera(0);
-                processo.setQuantumRestante(3);
-            };
-
-            processosProntos.getFila().addAll(processosBloqueados.getFila());
-            return;
-        }
-
-        for (BCP processo : processosBloqueados.getFila()) {
-            processo.incrementaNProcessosExecutadosEnquantoBloqueado();
-            processo.decrementaTempoEspera();
-        }
-
+    private void colocaBloqueadoEmPronto(
+        ListaProcessos processosBloqueados,
+        ListaProcessos processosProntos
+    ) {
         Iterator<BCP> iterator = processosBloqueados.getFila().iterator();
         while (iterator.hasNext()) {
             BCP processo = iterator.next();
@@ -66,6 +54,29 @@ public class Escalonador{
                 iterator.remove();
             }
         }
+    }
+
+    private void lidaProcessosBloqueados(
+            ListaProcessos processosBloqueados,
+            ListaProcessos processosProntos,
+            SistemaOperacional sistemaOperacional
+    ) {
+        if (processosProntos.getFila().isEmpty() && !processosBloqueados.getFila().isEmpty()) {
+            for (BCP processo : processosBloqueados.getFila()) {
+                processo.setTempoEspera(0);
+                processo.setQuantumRestante(sistemaOperacional.getQuantum());
+            }
+
+            this.colocaBloqueadoEmPronto(processosBloqueados, processosProntos);
+            return;
+        }
+
+        for (BCP processo : processosBloqueados.getFila()) {
+            processo.incrementaNProcessosExecutadosEnquantoBloqueado();
+            processo.decrementaTempoEspera();
+        }
+
+        this.colocaBloqueadoEmPronto(processosBloqueados, processosProntos);
     }
 
     public void colocaProcessoListaPronto(BCP processo, SistemaOperacional sistemaOperacional) {
@@ -84,7 +95,7 @@ public class Escalonador{
         logger.logExecutandoProcessos(processosProntos.getFila().get(0));
         processosProntos.getFila().remove(0);
 
-        lidaProcessosBloqueados(processosBloqueados, processosProntos);
+        lidaProcessosBloqueados(processosBloqueados, processosProntos, sistemaOperacional);
 
         while (processoExecutando.getQuantumRestante() > 0) {
             String comando = processoExecutando.getSegmentoTexto().get(processoExecutando.getPc());
