@@ -81,14 +81,14 @@ public class Logger {
         }
     }
 
-    void logSaida(SistemaOperacional sistemaOperacional){
+    void logSaida(Escalonador escalonador){
         try {
             logWriter = new FileWriter(log, true);
             logWriter.write("MEDIA DE TROCAS: "
-                + ((float) sistemaOperacional.getTrocasRealizadas()) / ((float)sistemaOperacional.getQuantidadeProcessos()) + "\n");
+                + ((float) escalonador.getTrocasRealizadas()) / ((float)escalonador.getQuantidadeProcessos()) + "\n");
             logWriter.write("MEDIA DE INSTRUCOES: "
-                + ((float) sistemaOperacional.getTotalDeInstrucoesExecutadas()) / ((float)sistemaOperacional.getQuantidadeQuantum()) + "\n");
-            logWriter.write("QUANTUM: " + sistemaOperacional.getQuantum() + "\n");
+                + ((float) escalonador.getTotalDeInstrucoesExecutadas()) / ((float)escalonador.getQuantidadeQuantum()) + "\n");
+            logWriter.write("QUANTUM: " + escalonador.getQuantum() + "\n");
             logWriter.close();
         } catch (IOException e){
             e.printStackTrace();
